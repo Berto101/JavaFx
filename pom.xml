@@ -6,18 +6,7 @@
     <groupId>com.example</groupId>
     <artifactId>my-project</artifactId>
     <version>1.0.0</version>
-<dependencies>
-    <!-- Other dependencies -->
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>17</version>
-    </dependency>
-    <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-fxml</artifactId>
-        <version>17</version>
-    </dependency>
-</dependencies>
-    
+
+    <!-- Define dependencies, build configuration, etc. here -->
+
 </project>
