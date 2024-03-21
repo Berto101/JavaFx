@@ -1,4 +1,6 @@
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -145,48 +147,4 @@ class Student {
 
     public Student(String name, String id, String course, String grade) {
         this.name = name;
-        this.id = id;
-        this.course = course;
-        this.grade = grade;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
-
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
-    }
-
-    public StringProperty nameProperty() {
-        return new SimpleStringProperty(name);
-    }
-
-    public StringProperty idProperty() {
-        return new SimpleStringProperty(id);
-    }
-
-    public StringProperty courseProperty() {
-        return new SimpleStringProperty(course);
-    }
-
-    public StringProperty gradeProperty() {
-        return new SimpleStringProperty(grade);
-    }
-}
+        this.id = id
