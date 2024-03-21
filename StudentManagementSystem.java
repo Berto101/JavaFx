@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -11,7 +12,7 @@ public class StudentManagementSystem extends Application {
 
     private TableView<Student> studentTable = new TableView<>();
     private ObservableList<Student> students = FXCollections.observableArrayList();
-    private ObservableList<String> courses = FXCollections.observableArrayList("Math", "Physics", "Chemistry"); // Example courses
+    private ObservableList<String> courses = FXCollections.observableArrayList("Math", "Physics", "Chemistry");
 
     @Override
     public void start(Stage primaryStage) {
@@ -40,9 +41,12 @@ public class StudentManagementSystem extends Application {
         studentForm.setVgap(5);
 
         Label nameLabel = new Label("Name:");
-        ComboBox<String> nameComboBox = new ComboBox<>(); // Dropdown for selecting students
-        nameComboBox.setItems(getStudentNames());
-        nameComboBox.setPromptText("Select student");
+        TextField nameField = new TextField();
+        nameField.setPromptText("Enter student's name");
+
+        Label idLabel = new Label("ID:");
+        TextField idField = new TextField();
+        idField.setPromptText("Enter student's ID");
 
         Label courseLabel = new Label("Course:");
         ComboBox<String> courseComboBox = new ComboBox<>(courses);
@@ -50,36 +54,45 @@ public class StudentManagementSystem extends Application {
 
         Label gradeLabel = new Label("Grade:");
         TextField gradeField = new TextField();
-        gradeField.setPromptText("Enter grade");
+        gradeField.setPromptText("Enter student's grade");
+
+        Button addButton = new Button("Add Student");
+        addButton.setOnAction(e -> {
+            Student student = new Student(nameField.getText(), idField.getText(), courseComboBox.getValue(), gradeField.getText());
+            students.add(student);
+            clearFields(nameField, idField, gradeField);
+        });
+
+        Button updateButton = new Button("Update Student");
+        updateButton.setOnAction(e -> {
+            // Add code to handle updating student information
+            // This could involve selecting a student from the table and displaying their information in the form for editing
+        });
+
+        Button enrollButton = new Button("Enroll Student");
+        enrollButton.setOnAction(e -> {
+            // Implement enrollment functionality
+            // Get the selected student and course from the table and ComboBox, and enroll the student in the course
+        });
 
         Button assignGradeButton = new Button("Assign Grade");
         assignGradeButton.setOnAction(e -> {
-            String selectedStudent = nameComboBox.getValue();
-            String selectedCourse = courseComboBox.getValue();
-            String grade = gradeField.getText();
-            try {
-                if (selectedStudent == null || selectedCourse == null || grade.isEmpty()) {
-                    throw new IllegalArgumentException("Please select a student, a course, and enter a grade.");
-                }
-                Student student = getStudent(selectedStudent);
-                if (student == null) {
-                    throw new IllegalArgumentException("Selected student not found.");
-                }
-                student.setGrade(grade);
-                student.setCourse(selectedCourse);
-                studentTable.refresh(); // Refresh the table to reflect the updated grade
-            } catch (IllegalArgumentException ex) {
-                displayError("Error", ex.getMessage());
-            }
+            // Implement functionality to assign grade to the selected student for the selected course
+            // Update the GUI to reflect the changes
         });
 
         studentForm.add(nameLabel, 0, 0);
-        studentForm.add(nameComboBox, 1, 0);
-        studentForm.add(courseLabel, 0, 1);
-        studentForm.add(courseComboBox, 1, 1);
-        studentForm.add(gradeLabel, 0, 2);
-        studentForm.add(gradeField, 1, 2);
-        studentForm.add(assignGradeButton, 0, 3, 2, 1);
+        studentForm.add(nameField, 1, 0);
+        studentForm.add(idLabel, 0, 1);
+        studentForm.add(idField, 1, 1);
+        studentForm.add(courseLabel, 0, 2);
+        studentForm.add(courseComboBox, 1, 2);
+        studentForm.add(gradeLabel, 0, 3);
+        studentForm.add(gradeField, 1, 3);
+        studentForm.add(addButton, 0, 4);
+        studentForm.add(updateButton, 1, 4);
+        studentForm.add(enrollButton, 0, 5);
+        studentForm.add(assignGradeButton, 1, 5);
 
         // Menu bar
         Menu fileMenu = new Menu("File");
@@ -106,29 +119,10 @@ public class StudentManagementSystem extends Application {
         primaryStage.show();
     }
 
-    private ObservableList<String> getStudentNames() {
-        ObservableList<String> names = FXCollections.observableArrayList();
-        for (Student student : students) {
-            names.add(student.getName());
+    private void clearFields(TextField... fields) {
+        for (TextField field : fields) {
+            field.clear();
         }
-        return names;
-    }
-
-    private Student getStudent(String name) {
-        for (Student student : students) {
-            if (student.getName().equals(name)) {
-                return student;
-            }
-        }
-        return null;
-    }
-
-    private void displayError(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     public static void main(String[] args) {
@@ -139,7 +133,7 @@ public class StudentManagementSystem extends Application {
 class Student {
     private final String name;
     private final String id;
-    private String course;
+    private final String course;
     private String grade;
 
     public Student(String name, String id, String course, String grade) {
@@ -159,10 +153,6 @@ class Student {
 
     public String getCourse() {
         return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
     }
 
     public String getGrade() {
