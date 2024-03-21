@@ -1,6 +1,4 @@
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -59,20 +57,19 @@ public class StudentManagementSystem extends Application {
             String selectedStudent = nameComboBox.getValue();
             String selectedCourse = courseComboBox.getValue();
             String grade = gradeField.getText();
-            // Implement functionality to assign grade to the selected student for the selected course
-            // Update the GUI to reflect the changes
             try {
                 if (selectedStudent == null || selectedCourse == null || grade.isEmpty()) {
                     throw new IllegalArgumentException("Please select a student, a course, and enter a grade.");
                 }
                 Student student = getStudent(selectedStudent);
-                if (student != null) {
-                    student.setCourse(selectedCourse);
-                    student.setGrade(grade);
-                    studentTable.refresh(); // Refresh the table to reflect the updated grade
+                if (student == null) {
+                    throw new IllegalArgumentException("Selected student not found.");
                 }
-            } catch (Exception ex) {
-                displayError("Error Assigning Grade", ex.getMessage());
+                student.setGrade(grade);
+                student.setCourse(selectedCourse);
+                studentTable.refresh(); // Refresh the table to reflect the updated grade
+            } catch (IllegalArgumentException ex) {
+                displayError("Error", ex.getMessage());
             }
         });
 
@@ -147,4 +144,48 @@ class Student {
 
     public Student(String name, String id, String course, String grade) {
         this.name = name;
-        this.id = id
+        this.id = id;
+        this.course = course;
+        this.grade = grade;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
+    public StringProperty nameProperty() {
+        return new SimpleStringProperty(name);
+    }
+
+    public StringProperty idProperty() {
+        return new SimpleStringProperty(id);
+    }
+
+    public StringProperty courseProperty() {
+        return new SimpleStringProperty(course);
+    }
+
+    public StringProperty gradeProperty() {
+        return new SimpleStringProperty(grade);
+    }
+}
